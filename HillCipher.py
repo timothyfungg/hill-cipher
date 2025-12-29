@@ -45,20 +45,26 @@ class HillCipher:
 
         return invertedKey
     
-    def encrypt(self, text):
+    def transform(self, text, matrix):
         ints = []
         for i in range(0, len(text)):
             ints.append(HillCipher.charToInt(text[i]))
         
         pairs = HillCipher.groupInts(ints)
-        encryptedPairs = []
+        transformedPairs = []
         for i in range(0, len(pairs)):
             pairs += []
 
         # matrix multiply key * pairs[i]
         for i in range(0, len(pairs)):
             for j in range(0, 2):
-                encryptedPairs[i].append(((self.key[0][0] * pairs[i][0]) + (self.key[0][1] * pairs[i][1])) % 26)
-                encryptedPairs[i].append(((self.key[1][0] * pairs[i][0]) + (self.key[1][1] * pairs[i][1])) % 26)
+                transformedPairs[i].append(((matrix[0][0] * pairs[i][0]) + (matrix[0][1] * pairs[i][1])) % 26)
+                transformedPairs[i].append(((matrix[1][0] * pairs[i][0]) + (matrix[1][1] * pairs[i][1])) % 26)
 
-        return encryptedPairs
+        return transformedPairs
+    
+    def encrypt(self, text):
+        self.transform(text, self.key)
+
+    def decrypt(self, text):
+        self.transform(text, self.invertedKey)

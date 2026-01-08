@@ -75,7 +75,7 @@ class HillCipher:
             25: 25
         }
         try:
-            detMod26Inverse = mod26[det]
+            detMod26Inverse = mod26[det % 26]
         except KeyError:
             raise Exception("Invalid key (no inverse)")
         
